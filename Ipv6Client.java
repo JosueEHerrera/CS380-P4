@@ -17,7 +17,6 @@ public class Ipv6Client{
 				short totalLength = (short)(40 + dataSize);
 				packet = new byte[totalLength];
 				new Random().nextBytes(packet); //assign random data first
-				//now header
 				packet[0] = 0b01100000; //version 6 and TrafficClass
 				packet[1] = 0; //TrafficClass cont'd and FlowLabel
 				packet[2] = 0; //FlowLabel
@@ -27,37 +26,29 @@ public class Ipv6Client{
 				packet[6] = 17; //NextHeader
 				packet[7] = 20; //HopLimit
 				byte[] ipv4Source = new byte[4];
-				new Random().nextBytes(ipv4Source); //a random IPv4 address
-				for(int j = 8; j < 18; j++) //80 0s for sourceAddr
+				new Random().nextBytes(ipv4Source); 
+				for(int j = 8; j < 18; j++) 
 					packet[j] = 0;
-				for(int j = 18; j < 20; j++) //16 1s for sourceAddress
+				for(int j = 18; j < 20; j++)
 					packet[j] = (byte)0xFF;
-				for(int j = 0; j < 4; j++) //4 byte IPv4 address
+				for(int j = 0; j < 4; j++) 
 					packet[j+20] = ipv4Source[j];
 				byte[] ipv4Dest = socket.getInetAddress().getAddress();
-				for(int j = 24; j < 34; j++) //80 0s for destAddr
+				for(int j = 24; j < 34; j++) 
 					packet[j] = 0;
-				for(int j = 34; j < 36; j++) //16 1s for destAddr
+				for(int j = 34; j < 36; j++) 
 					packet[j] = (byte)0xFF;
-				for(int j = 0; j < 4; j++) //4 byte IPv4 address
+				for(int j = 0; j < 4; j++) 
 					packet[j+36] = ipv4Dest[j];
 				out.write(packet);
 				byte[] code = new byte[4];
 				in.read(code);
 				System.out.println("packet size: " + dataSize);
 				System.out.print("0x");
-/*				int fullCode = 0;
-				for(int j = 0; j < 4; j++){
-					int temp = 0;
-					temp |= code[j];
-					temp <<= 8*(3-j);
-					fullCode |= temp;
-				}
-				System.out.printf("%X", fullCode);*/
 				for(byte e: code)
 					System.out.printf("%X", e);
 				System.out.println();
-			}//end for
-		}//end try
+			}
+		}
 	}
 }
